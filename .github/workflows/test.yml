@@ -22,7 +22,7 @@ jobs:
     - name: 设置python
       uses: actions/setup-python@v4
       with:
-        python-version:'3.10'
+        python-version: '3.10'
 
     - name: 安装依赖
       run: |
@@ -40,17 +40,17 @@ jobs:
       uses: actions/upload-artifact@v3
       if: always()
       with:
-        name:test-report
-        path:reports/pytest_report.html
+        name: test-report
+        path: reports/pytest_report.html
 
     - name: 上传覆盖率
       uses: codecov/codecov-action@v3
       with:
-        file:./coverage.xml
+        file: ./coverage.xml
     
     - name: 上传allure结果
       uses: actions/upload=artifact@v3
       if: always()
       with:
-        name:allure-results
-        path:reports/allure-results/
+        name: allure-results
+        path: reports/allure-results/
