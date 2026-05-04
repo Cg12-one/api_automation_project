@@ -33,7 +33,7 @@ jobs:
       run: |
         pytest tests/ -v \
         --alluredir=reports/allure-results \
-        --html-reports/pytest_report.html \
+        --html=reports/pytest_report.html \
         --self-contained-html
 
     - name: 上传报告
