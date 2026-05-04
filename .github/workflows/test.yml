@@ -1,16 +1,16 @@
-name:API自动化测试
+name: API自动化测试
 
-#触发条件
+# 触发条件
 on:
   push:
-    branches:[main,develop]
+    branches: [main,develop]
   pull_request:
-    branches:[main]
+    branches: [main]
   schedule:
-    #每天早上9点自动运行(UTC时间)
-    - corn: '0 1 * * *'
+    # 每天早上9点自动运行(UTC时间)
+    - cron: '0 1 * * *'
 
-#工作内容
+# 工作内容
 jobs:
   test:
     runs-on:ubuntu-latest
