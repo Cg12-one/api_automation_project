@@ -1,0 +1,26 @@
+create_order:
+  endpoint: /post
+  method: POST
+  json:
+    product_id: 1001
+    quantity: 2
+    user_id: 123
+  expected:
+    status_code: 200
+
+query_order:
+  endpoint: /get
+  method: GET
+  params:
+    order_id: "ORD20260425001"
+  expected:
+    status_code: 200
+
+cancel_order:
+  endpoint: /delete
+  method: DELETE
+  json:
+    order_id: "ORD20260425001"
+  expected:
+    status_code: 200
+
