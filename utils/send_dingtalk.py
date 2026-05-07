@@ -17,12 +17,18 @@ def send_notification(webhook,total,passed,failed,status):
      # 获取仓库信息
     repo = os.getenv("GITHUB_REPOSITORY", "Cg12-one/api_automation_project")
     
+    # 计算通过率（添加除零保护）
+    if total > 0:
+        success_rate = passed/total*100
+    else:
+        success_rate = 0.0
+
     message = {
         "msgtype":"markdown",
         "markdown":{
             "title":title,
             "text":f"""##{title}
-            
+
 **项目**: API自动化测试
 **执行时间**：{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 **总计**：{total}
