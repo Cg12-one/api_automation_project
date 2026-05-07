@@ -46,22 +46,34 @@ jobs:
       id: summary
       if: always()
       run: |
-        # 解析JSON报告
-        total=$(cat reports/result.json | jq '.summary.num_tests')
-        passed=$(cat reports/result.json | jq '.summary.num_passed')
-        failed=$(cat reports/result.json | jq '.summary.num_failed')
+        # 初始化默认值
+        total=0
+        passed=0
+        failed=0
+        status="passed"
         
-        # 设置输出变量
+        # 尝试解析 JSON 报告
+        if [ -f reports/result.json ]; then
+          total=$(cat reports/result.json | jq '.summary.num_tests // 0')
+          passed=$(cat reports/result.json | jq '.summary.num_passed // 0')
+          failed=$(cat reports/result.json | jq '.summary.num_failed // 0')
+          
+          # 判断状态
+          if [ "$failed" -gt 0 ]; then
+            status="failed"
+          fi
+        else
+          # 如果文件不存在，使用默认值
+          echo "⚠️ 未找到 result.json，使用默认值"
+        fi
+        
+        # 设置输出
         echo "total=$total" >> $GITHUB_OUTPUT
         echo "passed=$passed" >> $GITHUB_OUTPUT
         echo "failed=$failed" >> $GITHUB_OUTPUT
+        echo "status=$status" >> $GITHUB_OUTPUT
         
-        # 设置状态
-        if [ "$failed" -gt 0 ]; then
-          echo "status=failed" >> $GITHUB_OUTPUT
-        else
-          echo "status=passed" >> $GITHUB_OUTPUT
-        fi
+        echo "解析结果：total=$total, passed=$passed, failed=$failed, status=$status"
 
     - name: 上传报告
       uses: actions/upload-artifact@v4
@@ -89,6 +101,12 @@ jobs:
         DINGTALK_WEBHOOK: ${{ secrets.DINGTALK_WEBHOOK }}
         GITHUB_REPOSITORY: ${{ github.repository }}
       run: |
+        # 检查 webhook 是否设置
+          if [ -z "$DINGTALK_WEBHOOK" ]; then
+            echo "❌ 错误：DINGTALK_WEBHOOK 未设置"
+            exit 0  # 不中断流程
+          fi
+          
         python utils/send_dingtalk.py \
           --webhook $DINGTALK_WEBHOOK \
           --total ${{ steps.summary.outputs.total }} \
