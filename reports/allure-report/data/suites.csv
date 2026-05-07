@@ -1,0 +1,21 @@
+"Status","Start Time","Stop Time","Duration in ms","Parent Suite","Suite","Sub Suite","Test Class","Test Method","Name","Description"
+"passed","Thu May 07 15:37:34 CST 2026","Thu May 07 15:37:37 CST 2026","3396","tests","test_allure_optimized","TestUserAllure","","","TC002-失败登录测试-参数化","验证错误密码、空密码等情况登录失败"
+"failed","Thu May 07 15:37:29 CST 2026","Thu May 07 15:37:31 CST 2026","1875","tests","test_allure_optimized","TestUserAllure","","","TC001-成功登录测试","
+    测试目的：验证正确用户名密码可以成功登录
+
+    前置条件：
+    -用户已注册
+    -账号状态正常
+
+    测试步骤：
+    1.准备测试数据
+    2.发生登录请求
+    3.验证响应状态码
+    4.验证返回数据
+
+    预期结果
+    -状态码200
+    -返回用户信息
+    "
+"passed","Thu May 07 15:37:37 CST 2026","Thu May 07 15:37:39 CST 2026","1740","tests","test_allure_optimized","TestUserAllure","","","TC002-失败登录测试-参数化","验证错误密码、空密码等情况登录失败"
+"passed","Thu May 07 15:37:31 CST 2026","Thu May 07 15:37:34 CST 2026","2588","tests","test_allure_optimized","TestUserAllure","","","TC002-失败登录测试-参数化","验证错误密码、空密码等情况登录失败"

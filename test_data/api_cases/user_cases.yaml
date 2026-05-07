@@ -1,0 +1,49 @@
+#用户管理接口测试数据
+
+
+create_user:
+  description: "创建新用户"
+  endpoint: /post
+  method: POST
+  json:
+    username: test_user_001
+    email: test001@example.com
+    age: 25
+    role: user
+  expected:
+    #真实网址实际效果 status_code: 201
+    status_code: 200
+  priority: P0
+
+get_user:
+  description: "获取用户信息"
+  endpoint: /get
+  method: GET
+  params:
+    user_id: 123
+  expected:
+    status_code: 200
+  priority: P0
+
+update_user:
+  description: "更新用户新"
+  endpoint: /put
+  method: PUT
+  json:
+    user_id: 123
+    updates:
+      email: newemail@example.com
+      age: 26
+  expected:
+    status_code: 200
+  priority: P1
+
+delete_user:
+  description: "删除用户"
+  endpoint: /delete
+  method: DELETE
+  json:
+    user_id: 123
+  expected:
+    status_code: 200
+  priority: P1

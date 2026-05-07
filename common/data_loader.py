@@ -3,6 +3,7 @@ import json
 import yaml
 import csv
 import os
+from pathlib import Path
 
 class DataLoader:
     """数据加载器"""
@@ -26,3 +27,10 @@ class DataLoader:
                 cases.append(dict(row))
             return cases
 
+    @staticmethod
+    def get_test_data(case_name,data_file='login_cases.yaml'):
+        """获取特定测试用例数据"""
+        base_dir = Path(__file__).parent.parent / 'test_data' / 'api_cases'
+        filepath = base_dir / data_file
+        data = DataLoader.load_yaml(filepath)
+        return data.get(case_name)
