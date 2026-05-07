@@ -1,6 +1,0 @@
-
-URL:https://httpbin.org/post
-Method:POST
-Status Code:200
-Response Time:1872.95ms
-            

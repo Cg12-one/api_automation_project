@@ -32,11 +32,36 @@ jobs:
         pip install -r requirements.txt
 
     - name: 运行测试
+      id: test
       run: |
         pytest tests/ -v \
-        --alluredir=reports/allure-results \
-        --html=reports/pytest_report.html \
-        --self-contained-html
+          --tb=short \
+          --alluredir=reports/allure-results \
+          --html=reports/pytest_report.html \
+          --self-contained-html \
+          --json-report \
+          --json-report-file=reports/result.json
+
+    - name: 解析测试结果
+      id: summary
+      if: always()
+      run: |
+        # 解析JSON报告
+        total=$(cat reports/result.json | jq '.summary.num_tests')
+        passed=$(cat reports/result.json | jq '.summary.num_passed')
+        failed=$(cat reports/result.json | jq '.summary.num_failed')
+        
+        # 设置输出变量
+        echo "total=$total" >> $GITHUB_OUTPUT
+        echo "passed=$passed" >> $GITHUB_OUTPUT
+        echo "failed=$failed" >> $GITHUB_OUTPUT
+        
+        # 设置状态
+        if [ "$failed" -gt 0 ]; then
+          echo "status=failed" >> $GITHUB_OUTPUT
+        else
+          echo "status=passed" >> $GITHUB_OUTPUT
+        fi
 
     - name: 上传报告
       uses: actions/upload-artifact@v4
@@ -56,3 +81,17 @@ jobs:
       with:
         name: allure-results
         path: reports/allure-results/
+
+    # ========== 发送钉钉通知（新增） ==========
+    - name: 发送钉钉通知
+      if: always()
+      env:
+        DINGTALK_WEBHOOK: ${{ secrets.DINGTALK_WEBHOOK }}
+        GITHUB_REPOSITORY: ${{ github.repository }}
+      run: |
+        python utils/send_dingtalk.py \
+          --webhook $DINGTALK_WEBHOOK \
+          --total ${{ steps.summary.outputs.total }} \
+          --passed ${{ steps.summary.outputs.passed }} \
+          --failed ${{ steps.summary.outputs.failed }} \
+          --status ${{ steps.summary.outputs.status }}  
