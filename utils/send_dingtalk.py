@@ -7,6 +7,11 @@ from datetime import datetime
 def send_notification(webhook,total,passed,failed,status):
     """发送钉钉通知"""
 
+    # 确保参数是整数
+    total = int(total or 0)
+    passed = int(passed or 0)
+    failed = int(failed or 0)
+
     if status == "failed":
         color = "red"
         title = "测试失败"
@@ -34,7 +39,7 @@ def send_notification(webhook,total,passed,failed,status):
 **总计**：{total}
 **通过**：{passed}
 **失败**：{failed}
-**通过率**：{passed/total*100:.1f}%
+**通过率**：{success_rate:.1f}%
 
 [查看详情](https://github.com/{repo}/actions)
 """
